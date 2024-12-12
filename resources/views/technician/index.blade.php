@@ -1,6 +1,6 @@
 <?php 
 use Illuminate\Support\Facades\DB;
-
+use App\Models\ITRequestResponse;
 ?>
 
 @include('includes.header')
@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\DB;
             <!-- Cards -->
             <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
               <!-- Card -->
-              @foreach($request as $req)
+              @foreach($pending as $req)
 
               @php
                 $requestSummary = $req->request_summary; 
@@ -70,15 +70,6 @@ use Illuminate\Support\Facades\DB;
              @endphp
           
               <div class="flex items-start p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 transition-shadow hover:shadow-xl w-full max-w-4xl">
-                <!-- Icon Section -->
-                {{-- <div class="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full dark:bg-orange-500 text-orange-500 dark:text-orange-100">
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
-                    ></path>
-                  </svg>
-                </div> --}}
-
                 <!-- Card Content -->
                 <div class="ml-4 flex-1">
                   <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400" style="background-color: orange; padding: 6px;"
@@ -86,7 +77,7 @@ use Illuminate\Support\Facades\DB;
                   {{-- <p class="text-xs text-lg font-semibold text-gray-700 dark:text-gray-200 ">Request Number: {{$req->request_code}}</p> --}}
                   <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Request Number:</p>
                   <p class="text-xs font-semibold text-gray-700 dark:text-gray-200"> {{$req->request_code}}</p>
-
+                  <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Request Status: {{$req->status}}</p>
 
                   <div class="mt-3 space-y-1">
                     <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Request Date:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">{{$req->created_at}}</span></div>
@@ -117,37 +108,53 @@ use Illuminate\Support\Facades\DB;
               @endforeach
             </div>
 
-
               <!-- Card -->
-            <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-              <div
-                class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
-              >
-                <div
-                  class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fill-rule="evenodd"
-                      d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </div>
-                <div>
-                  <p
-                    class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
-                  >
-                    Ongoing Request
-                  </p>
-                  <p
-                    class="text-lg font-semibold text-gray-700 dark:text-gray-200"
-                  >
-                  13
-                  </p>
+              <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                @foreach ($accepted as $accept )
+                @php
+                $requestSummary = $req->request_summary; 
+                $requestArray = explode('|', $requestSummary);
+             @endphp
+          
+              <div class="flex items-start p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 transition-shadow hover:shadow-xl w-full max-w-4xl">
+                <!-- Card Content -->
+                <div class="ml-4 flex-1">
+                  <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400" style="background-color: rgb(214, 240, 199); padding: 6px;"
+                  >Ongoing Process</p>
+                  {{-- <p class="text-xs text-lg font-semibold text-gray-700 dark:text-gray-200 ">Request Number: {{$req->request_code}}</p> --}}
+                  <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Request Number:</p>
+                  <p class="text-xs font-semibold text-gray-700 dark:text-gray-200"> {{$accept->request_code}}</p>
+
+                  <div class="mt-3 space-y-1">
+                    <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Request Date:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">{{$accept->request_date}}</span></div>
+                    <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Status:Accepted By:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
+                    {{ ITRequestResponse::where('request_id', $accept->id)->first()->technician }}</span></div>
+                    <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Requestor:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
+                      {{ DB::connection('mysqlDts')->table('users')->where('username', $accept->requestor_userId)->selectRaw('concat(fname, " ", lname) as full_name')->value('full_name') }}</span></div>
+                    <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Section:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
+                    {{ DB::connection('mysqlDts')->table('section')->where('id', $req->section)->value('description')}}</span></div>
+                    <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Requests:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
+                      
+                    @foreach($requestArray as $item)
+                        <li>{{ $item }}</li>
+                    @endforeach
+
+                    @if($req->specific_details)
+                      <li>{{ $req->specific_details }}</li>
+                    @endif
+                    
+                    </span></div>
+                  </div>
+
+                  <div class="mt-4">
+                    <button class="text-sm btn btn-primary text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out">
+                      <a href="{{ route('tech.accepted', ['id' => $req->id]) }}">Done</a>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+                @endforeach
+              </div>
 
               
 

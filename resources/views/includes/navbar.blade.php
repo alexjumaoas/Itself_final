@@ -14,10 +14,10 @@ $user = Auth::guard('custom_users')->user();
               Request
           </a>
         @elseif($user->usertype === 3)
-          <a href="{{ route('requester.dashboard') }}"  class="text-lg font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-500">
+          <a href=""  class="text-lg font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-500">
               Requests
           </a> &nbsp;&nbsp;&nbsp;
-          <a href="{{ route('requester.dashboard') }}"  class="text-lg font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-500">
+          <a href=""  class="text-lg font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-500">
               Finish
           </a>
         @endif
