@@ -59,4 +59,26 @@ class TechnicianController extends Controller
 
         return redirect::back();
     }
+
+    public function techdone($reqId){
+        
+        $requestor = RequestModel::where('id', $reqId)->first();
+        $requestor->status = "done";
+        $requestor->save();
+
+        return redirect::back();
+    }
+
+    public function finishTechnician(){
+        
+        $techfinish = RequestModel::
+                    where('status', 'done')
+                    ->orderby('id','desc')
+                    ->get();
+
+        return view('technician.finish', [
+            'finish' => $techfinish
+        ]);
+    
+    }
 }

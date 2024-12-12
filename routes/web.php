@@ -26,6 +26,9 @@ Route::post('admin/technicians/remove', [AdminController::class, 'removetech'])-
 //**********************for Techinician *******************************//
 Route::get('technician/dashboard', [TechnicianController::class, 'technicians'])->middleware(['auth:custom_users', 'technician'])->name('technician.dashboard');
 Route::get('technician/accepted/{id}', [TechnicianController::class, 'techaccepted'])->middleware(['auth:custom_users', 'technician'])->name('tech.accepted');
+Route::get('technician/done/{id}', [TechnicianController::class, 'techdone'])->middleware(['auth:custom_users', 'technician'])->name('technician.done');
+Route::get('technician/finish', [TechnicianController::class, 'finishTechnician'])->middleware(['auth:custom_users', 'technician'])->name('technician.finish');
+
 
 //*********************End Technician ************************************/
 

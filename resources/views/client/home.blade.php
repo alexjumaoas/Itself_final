@@ -1,7 +1,7 @@
 
 <?php 
 use Illuminate\Support\Facades\DB;
-
+use App\Models\ITRequestResponse;
 ?>
 
 @include('includes.header')
@@ -73,7 +73,47 @@ use Illuminate\Support\Facades\DB;
               </div>
             @endforeach
             <!-- Example Request 2 -->
-            <div class="border border-gray-300 rounded-md shadow-md overflow-hidden">
+
+
+
+
+
+            @foreach($process as $req)
+            @php
+             $requestSummary = $req->request_summary; 
+             $requestArray = explode('|', $requestSummary);
+
+            @endphp
+               <div class="border border-gray-300 rounded-md shadow-md overflow-hidden">
+                <div class="bg-blue-500 p-3">
+ 
+                 <h3 class="text-black font-semibold">Request Number: {{$req->request_code}}</h3>
+               </div>
+               <div class="p-4">
+                 <p class="text-gray-600 dark:text-gray-400 mt-1">
+                 {{ ITRequestResponse::where('request_id', $req->id)->first()->technician }} is on the way
+                 </p>
+                 <p class="text-gray-800 dark:text-gray-100 font-medium">
+                  {{ DB::connection('mysqlDts')->table('users')->where('username', $req->requestor_userId)->selectRaw('concat(fname, " ", lname) as full_name')->value('full_name') }}
+                  of
+                 {{ DB::connection('mysqlDts')->table('section')->where('id', $req->section)->value('description')}}
+                 has requested the following service:
+                 </p>
+                 <ul class="list-disc list-inside mt-2">
+                   @foreach($requestArray as $item)
+                       <li>{{ $item }}</li>
+                   @endforeach
+                     <li>{{ $req->specific_details }}</li>
+                 </ul>
+               </div>
+             </div>
+           @endforeach
+
+
+
+
+
+            {{-- <div class="border border-gray-300 rounded-md shadow-md overflow-hidden">
               <div class="bg-blue-500 p-3">
                 <h3 class="text-white font-semibold">Request Number: 20241209133547-2693</h3>
               </div>
@@ -84,7 +124,9 @@ use Illuminate\Support\Facades\DB;
                   <li>Check Computer</li>
                 </ul>
               </div>
-            </div>
+            </div> --}}
+
+
           </div>
         </div>
 

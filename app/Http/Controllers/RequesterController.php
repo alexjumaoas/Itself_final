@@ -28,14 +28,20 @@ class RequesterController extends Controller
                                     ->where('status', 'Pending')
                                     ->orderby('id','desc')
                                     ->get();
-        // $userdts = DB::connection('mysqlDts')
+        // $clientprocess = DB::connection('mysqlDts')
         //             ->table('users')
         //             ->where('username', $user->username)
         //             ->get();
 
+        $clientprocess = RequestModel::where('requestor_userId', $user->username)
+                        ->where('status', 'accepted')
+                        ->orderby('id','desc')
+                        ->get();
+
         return view('client.home', [
             'request' =>  $getrequest,
-            'user' => $user
+            'user' => $user,
+            'process' => $clientprocess
         ]);
     }
 
@@ -74,6 +80,8 @@ class RequesterController extends Controller
         }
 
         $requestor->save();
+
+
         return redirect()->route('request.home');
         // return redirect::back();
     }

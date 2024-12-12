@@ -112,7 +112,7 @@ use App\Models\ITRequestResponse;
               <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                 @foreach ($accepted as $accept )
                 @php
-                $requestSummary = $req->request_summary; 
+                $requestSummary = $accept->request_summary; 
                 $requestArray = explode('|', $requestSummary);
              @endphp
           
@@ -132,15 +132,15 @@ use App\Models\ITRequestResponse;
                     <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Requestor:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
                       {{ DB::connection('mysqlDts')->table('users')->where('username', $accept->requestor_userId)->selectRaw('concat(fname, " ", lname) as full_name')->value('full_name') }}</span></div>
                     <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Section:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
-                    {{ DB::connection('mysqlDts')->table('section')->where('id', $req->section)->value('description')}}</span></div>
+                    {{ DB::connection('mysqlDts')->table('section')->where('id', $accept->section)->value('description')}}</span></div>
                     <div><span class="font-medium text-gray-600 dark:text-gray-400 text-xs"><strong>Requests:</strong></span> <span class="text-gray-700 dark:text-gray-200 text-xs">
                       
                     @foreach($requestArray as $item)
                         <li>{{ $item }}</li>
                     @endforeach
 
-                    @if($req->specific_details)
-                      <li>{{ $req->specific_details }}</li>
+                    @if($accept->specific_details)
+                      <li>{{ $accept->specific_details }}</li>
                     @endif
                     
                     </span></div>
@@ -148,7 +148,7 @@ use App\Models\ITRequestResponse;
 
                   <div class="mt-4">
                     <button class="text-sm btn btn-primary text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out">
-                      <a href="{{ route('tech.accepted', ['id' => $req->id]) }}">Done</a>
+                      <a href="{{ route('technician.done', ['id' => $accept->id]) }}">Done</a>
                     </button>
                   </div>
                 </div>
